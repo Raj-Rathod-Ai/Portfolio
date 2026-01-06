@@ -1,5 +1,6 @@
-/* ==================== 1. DYNAMIC THEME ENGINE ==================== */
+/* ==================== 1. CORE THEME ==================== */
 :root {
+    /* DEFAULT THEME: Purple/Blue (Nebula) - NO GREEN */
     --primary-color: #a855f7;  
     --secondary-color: #d946ef;
     --accent-color: #f8fafc;
@@ -22,7 +23,7 @@ body {
 
 h1, h2, h3, .logo { font-family: var(--heading-font); }
 
-/* ==================== 2. LAYERS & PRELOADER ==================== */
+/* ==================== 2. LAYERS ==================== */
 #bg-canvas, #cursor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 #bg-canvas { z-index: -2; }
 #cursor-canvas { z-index: -1; }
@@ -33,16 +34,12 @@ h1, h2, h3, .logo { font-family: var(--heading-font); }
     display: flex; justify-content: center; align-items: center;
     transition: opacity 0.5s ease-out;
 }
-.loader-content { 
-    display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; 
-}
+.loader-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
 
-/* --- LOADER VARIATION 1: QUANTUM SPINNER --- */
 .loader-quantum {
     width: 60px; height: 60px; border-radius: 50%;
     border: 3px solid transparent; border-top-color: var(--primary-color);
-    animation: spin 1s linear infinite; margin-bottom: 20px;
-    position: relative;
+    animation: spin 1s linear infinite; margin-bottom: 20px; position: relative;
 }
 .loader-quantum::before {
     content: ""; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
@@ -51,41 +48,12 @@ h1, h2, h3, .logo { font-family: var(--heading-font); }
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* --- LOADER VARIATION 2: RADAR --- */
-.loader-radar {
-    width: 60px; height: 60px; border: 2px solid var(--primary-color); border-radius: 50%;
-    position: relative; margin-bottom: 20px;
-    box-shadow: 0 0 15px var(--primary-color);
-}
-.loader-radar::after {
-    content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 2px;
-    background: var(--secondary-color); transform-origin: left; animation: radarSpin 1.5s infinite linear;
-}
-@keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-/* --- LOADER VARIATION 3: DNA HELIX --- */
-.loader-dna {
-    display: flex; gap: 5px; margin-bottom: 20px;
-}
-.dna-dot {
-    width: 8px; height: 30px; background: var(--primary-color);
-    animation: dnaWave 1s infinite ease-in-out; border-radius: 4px;
-}
-.dna-dot:nth-child(2) { animation-delay: 0.1s; background: var(--secondary-color); }
-.dna-dot:nth-child(3) { animation-delay: 0.2s; background: var(--primary-color); }
-.dna-dot:nth-child(4) { animation-delay: 0.3s; background: var(--secondary-color); }
-@keyframes dnaWave { 0%, 100% { height: 10px; opacity: 0.5; } 50% { height: 40px; opacity: 1; } }
-
-/* --- ANIMATED TEXT (WAVE) --- */
 .loading-text-wrapper {
     font-family: 'Courier New', monospace; font-size: 1.3rem; 
     color: var(--secondary-color); letter-spacing: 2px;
     display: flex; gap: 2px; text-transform: uppercase;
 }
-.wave-letter {
-    display: inline-block;
-    animation: waveText 1.5s infinite ease-in-out;
-}
+.wave-letter { display: inline-block; animation: waveText 1.5s infinite ease-in-out; }
 @keyframes waveText {
     0%, 100% { transform: translateY(0); color: var(--secondary-color); text-shadow: none; }
     50% { transform: translateY(-5px); color: #fff; text-shadow: 0 0 10px var(--primary-color); }
@@ -113,7 +81,7 @@ h1, h2, h3, .logo { font-family: var(--heading-font); }
 .nav-links a:hover, .nav-links a.active { color: #fff; }
 .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
-/* ==================== 4. GENERAL STYLES ==================== */
+/* ==================== 4. HERO SECTION ==================== */
 .container { padding-top: 60px; }
 .hero-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
 .hero-content { display: flex; flex-direction: column; align-items: center; width: 100%; text-align: center; position: relative; max-width: 1200px; height: 600px; justify-content: center;}
@@ -180,13 +148,12 @@ h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing:
 .scroll-down-indicator { margin-top: 4rem; animation: bounce 2s infinite; opacity: 0.6; font-size: 1.5rem; text-align: center; color: var(--secondary-color); }
 @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-10px);} 60% {transform: translateY(-5px);} }
 
-/* ==================== 5. SECTIONS & CARDS ==================== */
+/* ==================== 5. CARDS & SECTIONS ==================== */
 .section-padding { padding: 100px 0; }
 .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 3rem; font-weight: 700; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
 
 .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-/* Glass Cards */
 .dark-card, .project-card, .about-content-text {
     background: var(--glass-bg); backdrop-filter: blur(10px);
     border: var(--glass-border); border-radius: var(--card-radius); padding: 2rem;
@@ -198,7 +165,6 @@ h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing:
 .about-card { max-width: 900px; margin: 0 auto; padding: 3px; border-radius: var(--card-radius); background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0)); }
 .about-content-text p { color: #d1d5db; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem; }
 
-/* Experience */
 .experience-list { list-style: none; margin-top: 1rem; }
 .experience-list li { margin-bottom: 1rem; color: #d1d5db; display: flex; align-items: flex-start; gap: 10px; }
 .experience-list i { color: var(--primary-color); margin-top: 5px; }
@@ -207,13 +173,11 @@ h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing:
 .year-badge { background: rgba(255,255,255,0.05); color: var(--secondary-color); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); }
 .card-grade { font-weight: bold; color: #fff; margin-top: 5px; }
 
-/* Projects */
 .project-icon-box { width: 50px; height: 50px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; justify-content: center; align-items: center; color: var(--secondary-color); font-size: 1.5rem; margin-bottom: 1rem; }
 .project-content h3 { font-size: 1.4rem; margin-bottom: 10px; color: #fff; }
 .project-content p { color: #aaa; font-size: 0.95rem; margin-bottom: 20px; }
 .tech-stack { margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 8px; }
 .tech-stack span { background: rgba(255, 255, 255, 0.05); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; color: var(--primary-color); border: 1px solid rgba(255, 255, 255, 0.1); }
-
 .project-actions { margin-top: auto; display: flex; gap: 10px; }
 .btn-action {
     flex: 1; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 500; text-align: center;
@@ -223,7 +187,6 @@ h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing:
 .btn-action:hover { background: var(--primary-color); color: white; border-color: transparent; }
 .status-pill { float: right; font-size: 0.75rem; background: rgba(255, 165, 0, 0.15); color: #fbbf24; padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 165, 0, 0.3); }
 
-/* Skills */
 .skills-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 3rem; }
 .skill-category h3 { text-align: center; margin-bottom: 1.5rem; color: #ccc; border-bottom: 1px solid rgba(255,255,255,0.1); display: inline-block; position: relative; left: 50%; transform: translateX(-50%); padding-bottom: 5px;}
 .skill-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
@@ -237,7 +200,7 @@ h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; letter-spacing:
 .skill-item:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 0 15px var(--primary-color); background: var(--primary-color); }
 .skill-item:hover i, .skill-item:hover span { color: #000; }
 
-/* ==================== 6. FOOTER & MODAL ==================== */
+/* ==================== 6. FOOTER ==================== */
 footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 4rem; margin-top: 5rem; }
 .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; padding: 0 20px 3rem; }
 .footer-logo { font-size: 1.8rem; color: #fff; margin-bottom: 1rem; font-weight: 800; }
@@ -253,8 +216,60 @@ footer { background: #050505; border-top: 1px solid rgba(255,255,255,0.05); padd
 .footer-socials a:hover { background: var(--primary-color); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .footer-bar { text-align: center; padding: 1.5rem; background: #000; border-top: 1px solid rgba(255,255,255,0.05); color: #666; font-size: 0.9rem; }
 .footer-bar i { color: #ef4444; animation: beat 1.5s infinite; }
-@keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
+/* ==================== 7. CHAT WIDGET (RIGHT SIDE) ==================== */
+.chat-fab {
+    position: fixed; 
+    bottom: 30px; 
+    right: 30px; /* RIGHT SIDE */
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 0 20px var(--primary-color);
+    z-index: 10000; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid rgba(255, 255, 255, 0.2); animation: pulseGlow 2s infinite;
+}
+.chat-fab:hover { transform: scale(1.1) rotate(10deg); }
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(168, 85, 247, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+}
+
+.chat-box {
+    position: fixed; 
+    bottom: 100px; 
+    right: 30px; /* RIGHT SIDE */
+    width: 350px;
+    background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 20px;
+    z-index: 9999; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.9); transition: all 0.3s ease;
+}
+.chat-box.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
+.chat-header h4 { color: white; font-size: 1.1rem; font-weight: 600; }
+#close-chat { cursor: pointer; color: #aaa; transition: 0.3s; }
+#close-chat:hover { color: #fff; }
+
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; color: #ccc; font-size: 0.85rem; margin-bottom: 5px; }
+.input-group input, .input-group textarea {
+    width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px; border-radius: 8px; color: white; outline: none; font-family: var(--main-font); transition: 0.3s;
+}
+.input-group input:focus, .input-group textarea:focus { border-color: var(--primary-color); background: rgba(255, 255, 255, 0.1); }
+.input-group textarea { resize: none; height: 80px; }
+
+.btn-send {
+    width: 100%; padding: 12px; border-radius: 8px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+}
+.btn-send:hover { opacity: 0.9; transform: translateY(-2px); }
+
+/* ==================== 8. SUCCESS MODAL ==================== */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 .modal-content { background: #111; border: 1px solid var(--primary-color); padding: 2.5rem; border-radius: 20px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 50px rgba(0,0,0,0.5); transform: scale(0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
