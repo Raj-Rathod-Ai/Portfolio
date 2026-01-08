@@ -139,7 +139,7 @@ function handleLiveDemo(projectType) {
         modal.classList.add('active');
         
         if(projectType === 'fake_news') { mTitle.innerText = "Training Model"; mMsg.innerText = "Real-Time detection model is currently training."; }
-        else if(projectType === 'code_reviewer') { mTitle.innerText = "Integration Phase"; mMsg.innerText = "LLM API integration in progress."; }
+        else if(projectType === 'code_reviewer') { mTitle.innerText = "Development Phase"; mMsg.innerText = "LLM API integration in progress."; }
         else { mTitle.innerText = "In Development"; mMsg.innerText = "This project is currently being built."; }
     }
 }
