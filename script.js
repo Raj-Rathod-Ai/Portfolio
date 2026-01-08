@@ -88,13 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Preloader ---
-    const preloader = document.getElementById('preloader');
-    const loaderGraphic = document.getElementById('loader-graphic');
-    if (currentLoader === 'quantum') loaderGraphic.className = 'loader-quantum';
-    else loaderGraphic.className = 'loader-radar';
+// --- Preloader Logic ---
+const preloader = document.getElementById('preloader');
+const loaderGraphic = document.getElementById('loader-graphic');
+const textWrapper = document.getElementById('loading-text-wrapper');
 
-    const textWrapper = document.getElementById('loading-text-wrapper');
+// 1. Setup the loader appearance immediately
+if (loaderGraphic) {
+    loaderGraphic.className = (currentLoader === 'quantum') ? 'loader-quantum' : 'loader-radar';
+}
+
+if (textWrapper) {
     const text = "Connecting With Raj...";
+    textWrapper.innerHTML = ''; // Clear existing
     text.split('').forEach((char, index) => {
         const span = document.createElement('span');
         span.textContent = char === ' ' ? '\u00A0' : char; 
@@ -102,7 +108,20 @@ document.addEventListener('DOMContentLoaded', () => {
         span.style.animationDelay = `${index * 0.1}s`;
         textWrapper.appendChild(span);
     });
-    setTimeout(() => { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 2500);
+}
+
+// 2. Control the exit
+window.addEventListener('load', () => {
+    // Give it a minimum of 2 seconds so people actually see your animation
+    setTimeout(() => { 
+        if (preloader) {
+            preloader.style.opacity = '0'; 
+            setTimeout(() => { 
+                preloader.style.display = 'none'; 
+            }, 500); 
+        }
+    }, 2000); 
+});
 
     // --- Hover Fix ---
     document.querySelectorAll('.touch-card').forEach(card => {
