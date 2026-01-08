@@ -185,24 +185,83 @@ if(bgCanvas) {
 
 // ==================== CURSOR ====================
 const cursorCanvas = document.getElementById('cursor-canvas');
-if(cursorCanvas) {
+
+if (cursorCanvas) {
     const cCtx = cursorCanvas.getContext('2d');
-    let cWidth = cursorCanvas.width = window.innerWidth; let cHeight = cursorCanvas.height = window.innerHeight;
-    let mouse = { x: -100, y: -100 }; let trail = [];
-    window.addEventListener('resize', () => { cWidth = cursorCanvas.width = window.innerWidth; cHeight = cursorCanvas.height = window.innerHeight; });
-    window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; trail.push({ x: mouse.x, y: mouse.y, age: 0 }); });
-    function animateCursor() {
-        cCtx.clearRect(0, 0, cWidth, cHeight); cCtx.beginPath(); cCtx.fillStyle = currentTheme.primary; cCtx.arc(mouse.x, mouse.y, 5, 0, Math.PI*2); cCtx.fill();
-        for (let i = 0; i < trail.length; i++) {
-            const p = trail[i]; p.age++;
-            if (currentTheme.cursor === 'glow') { cCtx.beginPath(); cCtx.fillStyle = currentTheme.secondary; cCtx.globalAlpha = 1 - (p.age / 15); cCtx.arc(p.x, p.y, 2 + (p.age/2), 0, Math.PI*2); cCtx.fill(); cCtx.globalAlpha = 1; }
-            else { if (i > 0) { cCtx.beginPath(); cCtx.strokeStyle = currentTheme.primary; cCtx.lineWidth = 2; cCtx.globalAlpha = 1 - (p.age / 20); cCtx.moveTo(trail[i-1].x, trail[i-1].y); cCtx.lineTo(p.x, p.y); cCtx.stroke(); cCtx.globalAlpha = 1; } }
+    let cWidth = cursorCanvas.width = window.innerWidth;
+    let cHeight = cursorCanvas.height = window.innerHeight;
+    let mouse = { x: -100, y: -100 };
+    let trail = [];
+
+    window.addEventListener('resize', () => {
+        cWidth = cursorCanvas.width = window.innerWidth;
+        cHeight = cursorCanvas.height = window.innerHeight;
+    });
+
+    // Function to handle coordinate updates
+    const updatePosition = (x, y) => {
+        mouse.x = x;
+        mouse.y = y;
+        trail.push({ x: mouse.x, y: mouse.y, age: 0 });
+    };
+
+    // Desktop: Mouse Move
+    window.addEventListener('mousemove', (e) => {
+        updatePosition(e.clientX, e.clientY);
+    });
+
+    // Mobile: Touch Move & Start
+    const handleTouch = (e) => {
+        // Prevents scrolling while interacting with the canvas
+        if (e.touches.length > 0) {
+            const touch = e.touches[0];
+            updatePosition(touch.clientX, touch.clientY);
         }
-        trail = trail.filter(p => p.age < 15); requestAnimationFrame(animateCursor);
+    };
+
+    // passive: false is required to allow e.preventDefault() if you want to stop scrolling
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+
+    function animateCursor() {
+        cCtx.clearRect(0, 0, cWidth, cHeight);
+        
+        // Draw Main Pointer
+        cCtx.beginPath();
+        cCtx.fillStyle = currentTheme.primary;
+        cCtx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
+        cCtx.fill();
+
+        for (let i = 0; i < trail.length; i++) {
+            const p = trail[i];
+            p.age++;
+
+            if (currentTheme.cursor === 'glow') {
+                cCtx.beginPath();
+                cCtx.fillStyle = currentTheme.secondary;
+                cCtx.globalAlpha = 1 - (p.age / 15);
+                cCtx.arc(p.x, p.y, 2 + (p.age / 2), 0, Math.PI * 2);
+                cCtx.fill();
+                cCtx.globalAlpha = 1;
+            } else {
+                if (i > 0) {
+                    cCtx.beginPath();
+                    cCtx.strokeStyle = currentTheme.primary;
+                    cCtx.lineWidth = 2;
+                    cCtx.globalAlpha = 1 - (p.age / 20);
+                    cCtx.moveTo(trail[i - 1].x, trail[i - 1].y);
+                    cCtx.lineTo(p.x, p.y);
+                    cCtx.stroke();
+                    cCtx.globalAlpha = 1;
+                }
+            }
+        }
+
+        trail = trail.filter(p => p.age < 15);
+        requestAnimationFrame(animateCursor);
     }
     animateCursor();
 }
-
 // ==================== HACKER TEXT ====================
 const hackerText = document.querySelector('.hacker-text');
 const phrases = ["DSA Expert", "AI Engineer", "Data Scientist", "Problem Solver"];
