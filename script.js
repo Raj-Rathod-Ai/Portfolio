@@ -1,4 +1,5 @@
 // ==================== 1. THEME ENGINE ====================
+// REMOVED GREEN THEME (Cyberpunk)
 const themes = [
     { name: 'Nebula', primary: '#a855f7', secondary: '#d946ef', bg: 'stars', font: 'Segoe UI', radius: '16px', cursor: 'glow' },
     { name: 'Oceanic', primary: '#00d2ff', secondary: '#3a7bd5', bg: 'bubbles', font: 'Verdana', radius: '30px', cursor: 'elastic' },
@@ -14,7 +15,7 @@ const profileImages = [
     "sayajibag.jpeg"
 ];
 const currentImage = profileImages[Math.floor(Math.random() * profileImages.length)];
-const currentLoader = ['quantum', 'radar'][Math.floor(Math.random() * 2)];
+const currentLoader = ['quantum', 'radar'][Math.floor(Math.random() * 2)]; // Removed DNA for simplicity
 
 const root = document.documentElement;
 root.style.setProperty('--primary-color', currentTheme.primary);
@@ -25,11 +26,12 @@ root.style.setProperty('--card-radius', currentTheme.radius);
 // ==================== MAIN LOGIC ====================
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- Image Application ---
+    // --- Image Application (Square Frame Removed) ---
     const heroImg = document.getElementById('hero-profile-img');
     const navImg = document.getElementById('nav-profile-img');
     if(heroImg) heroImg.src = currentImage;
     if(navImg) navImg.src = currentImage;
+    // Always circular now, no square check
 
     // --- Chat Box UI ---
     const chatFab = document.getElementById('chat-fab');
@@ -41,11 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         closeChat.addEventListener('click', () => chatBox.classList.remove('active'));
     }
 
-    // --- FORMSUBMIT Sending Logic ---
+    // --- FORMSUBMIT.CO SENDING LOGIC (Background) ---
     const contactForm = document.getElementById('contact-form');
     if(contactForm) {
         contactForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // Stop page reload
+            
             const btn = contactForm.querySelector('.btn-send');
             const originalText = btn.innerHTML;
             const senderName = document.getElementById('msg-name').value;
@@ -53,9 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             btn.disabled = true;
 
+            // AJAX FETCH to FormSubmit
             fetch("https://formsubmit.co/ajax/rathodraj1504@gmail.com", {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({
                     name: senderName,
                     email: document.getElementById('msg-email').value,
@@ -64,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(data => {
+                // SUCCESS: Show Popup
                 showThankYouPopup(senderName);
                 contactForm.reset();
                 chatBox.classList.remove('active');
@@ -71,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = false;
             })
             .catch(error => {
+                console.log(error);
                 alert("Something went wrong. Please check internet connection.");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -95,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     setTimeout(() => { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 2500);
 
-    // --- Touch Cards ---
+    // --- Hover Fix ---
     document.querySelectorAll('.touch-card').forEach(card => {
         card.addEventListener('touchstart', () => { card.classList.add('touch-active'); }, {passive: true});
         card.addEventListener('touchend', () => { setTimeout(() => { card.classList.remove('touch-active'); }, 300); }, {passive: true});
@@ -108,9 +117,11 @@ function showThankYouPopup(name) {
     const mTitle = document.getElementById('modal-title');
     const mMsg = document.getElementById('modal-message');
     const mIcon = document.getElementById('modal-icon');
+
     mIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
     mTitle.innerText = `Message Sent!`;
     mMsg.innerText = `Thanks ${name}, I will reply to your email shortly.`;
+    
     modal.classList.add('active');
 }
 
@@ -123,8 +134,10 @@ function handleLiveDemo(projectType) {
         const mTitle = document.getElementById('modal-title');
         const mMsg = document.getElementById('modal-message');
         const mIcon = document.getElementById('modal-icon');
+        
         mIcon.innerHTML = '<i class="fas fa-rocket"></i>';
         modal.classList.add('active');
+        
         if(projectType === 'fake_news') { mTitle.innerText = "Training Model"; mMsg.innerText = "Real-Time detection model is currently training."; }
         else if(projectType === 'code_reviewer') { mTitle.innerText = "Integration Phase"; mMsg.innerText = "LLM API integration in progress."; }
         else { mTitle.innerText = "In Development"; mMsg.innerText = "This project is currently being built."; }
@@ -142,15 +155,20 @@ if(bgCanvas) {
     let bgParticles = [];
     function initBackground() {
         bgParticles = [];
+        // Removed Matrix (Green) background check
         if (currentTheme.bg === 'stars') {
             for(let i=0; i<100; i++) bgParticles.push({ x: Math.random() * width, y: Math.random() * height, size: Math.random() * 2, speed: Math.random() * 0.5 + 0.1 });
         } else if (currentTheme.bg === 'bubbles') {
             for(let i=0; i<20; i++) bgParticles.push({ x: Math.random() * width, y: Math.random() * height, size: Math.random() * 20 + 10, speed: Math.random() * 1 + 0.5 });
+        } else {
+             // Fallback for grid
+             // ...
         }
     }
     initBackground();
     function animateBackground() {
-        bgCtx.fillStyle = '#000000'; bgCtx.fillRect(0, 0, width, height);
+        bgCtx.fillStyle = '#000000';
+        bgCtx.fillRect(0, 0, width, height);
         if (currentTheme.bg === 'stars') {
             bgCtx.fillStyle = '#fff'; bgParticles.forEach(p => { bgCtx.beginPath(); bgCtx.arc(p.x, p.y, p.size, 0, Math.PI*2); bgCtx.fill(); p.y += p.speed; if(p.y > height) p.y = 0; });
         } else if (currentTheme.bg === 'bubbles') {
@@ -165,7 +183,7 @@ if(bgCanvas) {
     animateBackground();
 }
 
-// ==================== CURSOR LOGIC (FIXED) ====================
+// ==================== CURSOR ====================
 const cursorCanvas = document.getElementById('cursor-canvas');
 
 if (cursorCanvas) {
@@ -174,80 +192,76 @@ if (cursorCanvas) {
     let cHeight = cursorCanvas.height = window.innerHeight;
     let mouse = { x: -100, y: -100 };
     let trail = [];
-    let isInteracting = false; 
 
     window.addEventListener('resize', () => {
         cWidth = cursorCanvas.width = window.innerWidth;
         cHeight = cursorCanvas.height = window.innerHeight;
     });
 
+    // Function to handle coordinate updates
     const updatePosition = (x, y) => {
         mouse.x = x;
         mouse.y = y;
-        trail.push({ x: x, y: y, age: 0 });
+        trail.push({ x: mouse.x, y: mouse.y, age: 0 });
     };
 
-    // Mouse Listeners
+    // Desktop: Mouse Move
     window.addEventListener('mousemove', (e) => {
-        isInteracting = true;
         updatePosition(e.clientX, e.clientY);
     });
-    window.addEventListener('mouseleave', () => { isInteracting = false; });
 
-    // Touch Listeners
-    window.addEventListener('touchstart', (e) => {
-        isInteracting = true;
-        const touch = e.touches[0];
-        updatePosition(touch.clientX, touch.clientY);
-    }, { passive: true });
+    // Mobile: Touch Move & Start
+    const handleTouch = (e) => {
+        // Prevents scrolling while interacting with the canvas
+        if (e.touches.length > 0) {
+            const touch = e.touches[0];
+            updatePosition(touch.clientX, touch.clientY);
+        }
+    };
 
-    window.addEventListener('touchmove', (e) => {
-        const touch = e.touches[0];
-        updatePosition(touch.clientX, touch.clientY);
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-        isInteracting = false;
-        mouse.x = -100;
-        mouse.y = -100;
-    });
+    // passive: false is required to allow e.preventDefault() if you want to stop scrolling
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('touchmove', handleTouch, { passive: true });
 
     function animateCursor() {
         cCtx.clearRect(0, 0, cWidth, cHeight);
         
-        if (isInteracting && mouse.x > 0) {
-            cCtx.beginPath();
-            cCtx.fillStyle = currentTheme.primary;
-            cCtx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
-            cCtx.fill();
-        }
+        // Draw Main Pointer
+        cCtx.beginPath();
+        cCtx.fillStyle = currentTheme.primary;
+        cCtx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
+        cCtx.fill();
 
         for (let i = 0; i < trail.length; i++) {
             const p = trail[i];
             p.age++;
-            cCtx.globalAlpha = 1 - (p.age / 15);
 
             if (currentTheme.cursor === 'glow') {
                 cCtx.beginPath();
                 cCtx.fillStyle = currentTheme.secondary;
+                cCtx.globalAlpha = 1 - (p.age / 15);
                 cCtx.arc(p.x, p.y, 2 + (p.age / 2), 0, Math.PI * 2);
                 cCtx.fill();
-            } else if (i > 0) {
-                cCtx.beginPath();
-                cCtx.strokeStyle = currentTheme.primary;
-                cCtx.lineWidth = 2;
-                cCtx.moveTo(trail[i - 1].x, trail[i - 1].y);
-                cCtx.lineTo(p.x, p.y);
-                cCtx.stroke();
+                cCtx.globalAlpha = 1;
+            } else {
+                if (i > 0) {
+                    cCtx.beginPath();
+                    cCtx.strokeStyle = currentTheme.primary;
+                    cCtx.lineWidth = 2;
+                    cCtx.globalAlpha = 1 - (p.age / 20);
+                    cCtx.moveTo(trail[i - 1].x, trail[i - 1].y);
+                    cCtx.lineTo(p.x, p.y);
+                    cCtx.stroke();
+                    cCtx.globalAlpha = 1;
+                }
             }
         }
-        cCtx.globalAlpha = 1;
+
         trail = trail.filter(p => p.age < 15);
         requestAnimationFrame(animateCursor);
     }
     animateCursor();
 }
-
 // ==================== HACKER TEXT ====================
 const hackerText = document.querySelector('.hacker-text');
 const phrases = ["DSA Expert", "AI Engineer", "Data Scientist", "Problem Solver"];
