@@ -96,7 +96,7 @@ h1, h2, h3, .logo { font-family: var(--heading-font); }
     background: var(--primary-color); transition: width 0.3s ease;
 }
 .nav-links a:hover, .nav-links a.active { color: #fff; }
-.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-links a:hover::after, .nav-links { width: 100%; }
 
 /* ==================== 4. HERO SECTION ==================== */
 .container { padding-top: 60px; }
