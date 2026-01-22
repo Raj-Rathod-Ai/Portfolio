@@ -234,7 +234,7 @@ if (cursorCanvas) {
         // Prevents scrolling while interacting with the canvas
         if (e.touches.length > 0) {
             const touch = e.touches[0];
-            touch.style.transition = 'all 0.1s linear';
+            e.target.style.transition = 'all 0.1s linear';
             updatePosition(touch.clientX, touch.clientY);
         }
     };
